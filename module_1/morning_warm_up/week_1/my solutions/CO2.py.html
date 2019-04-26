@@ -1,0 +1,103 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import pandas as pd
+import numpy as np
+import datetime
+
+
+# In[2]:
+
+
+df = pd.read_table("ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt", delim_whitespace=True, comment='#', header=None)
+
+
+# In[3]:
+
+
+df.head()
+
+
+# In[4]:
+
+
+newdf=df[[0,1,3]]
+
+
+# In[15]:
+
+
+for i in range(len(newdf[[3]])):
+    if float(newdf[[3]].loc[i]) == -99.99: 
+        newdf[[3]].loc[i] = np.nan
+        print(newdf[[3]].loc[i])
+
+
+# In[6]:
+
+
+names= ["year", "month","co2"]
+newdf.columns = names
+newdf
+
+
+# In[7]:
+
+
+newdf['day']=15
+newdf
+
+
+# In[8]:
+
+
+newdf['date'] =0
+for i in range(len(newdf)):
+    newdf['date'].loc[i]= datetime.date(newdf['year'].loc[i],newdf['month'].loc[i],newdf['day'].loc[i])
+
+
+# In[9]:
+
+
+newdf
+
+
+# In[10]:
+
+
+newdf.groupby('year').co2.mean()
+
+
+# In[11]:
+
+
+co2= np.array(newdf['co2'])
+type(co2)
+
+
+# In[12]:
+
+
+newdf=df[[0,1,3]]
+
+
+# In[13]:
+
+
+newdf[[3]]=np.where(newdf[[3]]==-99.99,np.nan, newdf[[3]])
+
+
+# In[14]:
+
+
+newdf
+
+
+# In[ ]:
+
+
+
+
